@@ -88,7 +88,9 @@ class EndpointResolver {
 
   async fetchApiDescriptor (domain, port) {
     const protocol = (domain === 'localhost' || domain === 'localhost.') ? 'http' : 'https'
-    const wellKnown = await this.http.get(`${protocol}://${domain}:${port}/.well-known/bsvalias`)
+    domain = domain.replace(/\.$/, '')
+    port = port !== '443' ? `:${port}` : ``
+    const wellKnown = await this.http.get(`${protocol}://${domain}${port}/.well-known/bsvalias`)
     const apiDescriptor = await wellKnown.json()
     return apiDescriptor
   }
